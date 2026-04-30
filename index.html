@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eSKape Garden Rooms | Transform Your Outdoor Living</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #1a2818;
+    --moss: #2d4a28;
+    --sage: #4a6741;
+    --green: #5c9e42;
+    --green-light: #82c45f;
+    --cream: #f5f0e8;
+    --warm-white: #faf8f4;
+    --charcoal: #1c1c1c;
+    --mid: #6b6b5a;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--warm-white);
+    color: var(--charcoal);
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  body { cursor: none; }
+  #cursor {
+    position: fixed; width: 10px; height: 10px;
+    background: var(--green); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform .15s ease, width .3s ease, height .3s ease, background .3s ease;
+    mix-blend-mode: multiply;
+  }
+  #cursor-ring {
+    position: fixed; width: 36px; height: 36px;
+    border: 1px solid var(--green); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: transform .4s cubic-bezier(.25,.46,.45,.94), width .3s ease, height .3s ease, border-color .3s ease;
+    opacity: .7;
+  }
+  body:has(a:hover) #cursor, body:has(button:hover) #cursor { width: 20px; height: 20px; background: var(--green-light); }
+  body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: var(--green-light); }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 2rem 4rem;
+    transition: background .5s ease, padding .4s ease, backdrop-filter .5s ease;
+  }
+  nav.scrolled {
+    background: rgba(26, 40, 24, 0.92);
+    backdrop-filter: blur(12px);
+    padding: 1.2rem 4rem;
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-weight: 400; letter-spacing: .15em;
+    color: var(--cream); text-decoration: none;
+  }
+  .logo span { color: var(--green-light); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-family: 'Jost', sans-serif; font-size: .75rem; font-weight: 400;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--cream);
+    text-decoration: none; position: relative; opacity: .85;
+    transition: opacity .2s;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 1px;
+    background: var(--green); transform: scaleX(0); transform-origin: left;
+    transition: transform .35s cubic-bezier(.25,.46,.45,.94);
+  }
+  .nav-links a:hover { opacity: 1; }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-cta {
+    font-family: 'Jost', sans-serif; font-size: .7rem; font-weight: 500;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: #fff; background: var(--green);
+    padding: .7rem 1.6rem; text-decoration: none;
+    transition: background .3s ease, color .3s ease, transform .2s ease;
+  }
+  .nav-cta:hover { background: var(--green-light); transform: translateY(-1px); color: #fff; }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative; height: 100vh; min-height: 700px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(160deg, rgba(26,40,24,.88) 0%, rgba(26,40,24,.5) 50%, rgba(26,40,24,.75) 100%),
+      url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1800&q=80') center/cover no-repeat;
+    transform: scale(1.05);
+    animation: heroZoom 16s ease-in-out infinite alternate;
+  }
+  @keyframes heroZoom { from { transform: scale(1.05); } to { transform: scale(1.12); } }
+
+  /* grain overlay */
+  .hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: .4; pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative; text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 2rem;
+  }
+  .hero-eyebrow {
+    font-family: 'Jost', sans-serif; font-size: .7rem; font-weight: 400;
+    letter-spacing: .4em; text-transform: uppercase; color: var(--green);
+    opacity: 0; animation: fadeUp .8s .3s forwards;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(3.5rem, 9vw, 8rem);
+    font-weight: 300; line-height: 1.0; color: var(--cream);
+    opacity: 0; animation: fadeUp .9s .5s forwards;
+  }
+  .hero-title em { font-style: italic; color: var(--green-light); }
+  .hero-sub {
+    font-family: 'Jost', sans-serif; font-size: 1rem; font-weight: 200;
+    letter-spacing: .12em; color: rgba(245,240,232,.75);
+    max-width: 520px; line-height: 1.8;
+    opacity: 0; animation: fadeUp .8s .7s forwards;
+  }
+  .hero-actions {
+    display: flex; gap: 1.5rem; margin-top: .5rem;
+    opacity: 0; animation: fadeUp .8s .9s forwards;
+  }
+  .btn-primary {
+    font-family: 'Jost', sans-serif; font-size: .75rem; font-weight: 500;
+    letter-spacing: .2em; text-transform: uppercase;
+    background: var(--green); color: #fff;
+    padding: 1.1rem 2.8rem; text-decoration: none;
+    transition: background .3s, transform .2s, box-shadow .3s;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--green-light); transform: translateX(-110%);
+    transition: transform .4s cubic-bezier(.25,.46,.45,.94);
+  }
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-secondary {
+    font-family: 'Jost', sans-serif; font-size: .75rem; font-weight: 400;
+    letter-spacing: .2em; text-transform: uppercase;
+    border: 1px solid rgba(245,240,232,.4); color: var(--cream);
+    padding: 1.1rem 2.8rem; text-decoration: none;
+    transition: border-color .3s, background .3s;
+  }
+  .btn-secondary:hover { border-color: var(--green); background: rgba(92,158,66,.08); }
+
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: .5rem;
+    opacity: 0; animation: fadeIn 1s 1.5s forwards;
+  }
+  .hero-scroll span {
+    font-family: 'Jost', sans-serif; font-size: .65rem; letter-spacing: .25em;
+    text-transform: uppercase; color: rgba(245,240,232,.5);
+  }
+  .scroll-line {
+    width: 1px; height: 50px; background: linear-gradient(to bottom, rgba(92,158,66,.6), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse { 0%,100% { transform: scaleY(1); opacity: .6; } 50% { transform: scaleY(1.3); opacity: 1; } }
+
+  @keyframes fadeUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  /* ── MARQUEE ── */
+  .marquee-strip {
+    background: var(--moss); padding: .9rem 0; overflow: hidden;
+    border-top: 1px solid rgba(92,158,66,.25);
+    border-bottom: 1px solid rgba(92,158,66,.25);
+  }
+  .marquee-track {
+    display: flex; gap: 3rem; animation: marquee 22s linear infinite;
+    width: max-content;
+  }
+  .marquee-item {
+    font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 400;
+    font-style: italic; color: rgba(200,235,180,.9); letter-spacing: .05em;
+    white-space: nowrap; display: flex; align-items: center; gap: 1.5rem;
+  }
+  .marquee-item::after { content: '✦'; font-style: normal; font-size: .6rem; opacity: .7; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ── SECTION BASE ── */
+  section { padding: 8rem 4rem; }
+  .section-label {
+    font-family: 'Jost', sans-serif; font-size: .65rem; font-weight: 400;
+    letter-spacing: .4em; text-transform: uppercase; color: var(--green);
+    display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+  }
+  .section-label::before { content: ''; width: 40px; height: 1px; background: var(--green); }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300; line-height: 1.1; color: var(--forest);
+  }
+  .section-title em { font-style: italic; color: var(--sage); }
+
+  /* ── ABOUT ── */
+  #about {
+    background: var(--warm-white); position: relative;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8rem; align-items: center;
+  }
+  .about-visual {
+    position: relative; height: 620px;
+  }
+  .about-img-main {
+    width: 78%; height: 100%;
+    background: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80') center/cover;
+    position: absolute; right: 0; top: 0;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 8% 100%);
+  }
+  .about-img-accent {
+    width: 48%; height: 48%;
+    background: url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80') center/cover;
+    position: absolute; left: 0; bottom: 8%;
+    border: 6px solid var(--warm-white);
+    box-shadow: 0 20px 60px rgba(0,0,0,.15);
+  }
+  .about-badge {
+    position: absolute; right: 0; bottom: 0;
+    background: var(--green); width: 120px; height: 120px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+  }
+  .about-badge strong { font-size: 2.2rem; font-weight: 600; color: #fff; line-height: 1; }
+  .about-badge span { font-size: .65rem; font-weight: 300; color: #fff; letter-spacing: .1em; text-transform: uppercase; text-align: center; }
+
+  .about-text { padding-left: 2rem; }
+  .about-text p {
+    font-family: 'Jost', sans-serif; font-size: 1.05rem; font-weight: 300;
+    line-height: 1.9; color: var(--mid); margin: 2rem 0;
+  }
+  .about-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem;
+    border-top: 1px solid rgba(0,0,0,.08); padding-top: 2.5rem;
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 300;
+    color: var(--forest); line-height: 1;
+  }
+  .stat-num span { color: var(--green); }
+  .stat-label {
+    font-family: 'Jost', sans-serif; font-size: .75rem; font-weight: 300;
+    letter-spacing: .15em; text-transform: uppercase; color: var(--mid);
+    margin-top: .3rem;
+  }
+
+  /* ── SERVICES ── */
+  #services { background: var(--forest); padding: 8rem 4rem; }
+  #services .section-title { color: var(--cream); }
+  #services .section-label { color: var(--green); }
+  .services-header { max-width: 700px; margin-bottom: 5rem; }
+  .services-header p {
+    font-family: 'Jost', sans-serif; font-size: 1rem; font-weight: 300;
+    line-height: 1.9; color: rgba(245,240,232,.6); margin-top: 1.5rem;
+  }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .service-card {
+    position: relative; overflow: hidden; cursor: none;
+    aspect-ratio: 3/4; background: var(--moss);
+  }
+  .service-card .card-bg {
+    position: absolute; inset: 0; transition: transform .7s cubic-bezier(.25,.46,.45,.94);
+    background-size: cover; background-position: center;
+  }
+  .service-card:hover .card-bg { transform: scale(1.08); }
+  .card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(26,40,24,.95) 0%, rgba(26,40,24,.3) 60%, transparent 100%);
+    transition: background .5s;
+  }
+  .service-card:hover .card-overlay { background: linear-gradient(to top, rgba(26,40,24,.98) 0%, rgba(26,40,24,.6) 70%, rgba(26,40,24,.2) 100%); }
+  .card-content {
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 2.5rem;
+  }
+  .card-num {
+    font-family: 'Cormorant Garamond', serif; font-size: .9rem; color: var(--green);
+    letter-spacing: .15em; margin-bottom: 1rem;
+  }
+  .card-title {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300;
+    color: var(--cream); line-height: 1.2; margin-bottom: 1rem;
+  }
+  .card-desc {
+    font-family: 'Jost', sans-serif; font-size: .85rem; font-weight: 300;
+    line-height: 1.7; color: rgba(245,240,232,.7);
+    max-height: 0; overflow: hidden; opacity: 0;
+    transition: max-height .5s ease, opacity .4s .1s ease;
+  }
+  .service-card:hover .card-desc { max-height: 120px; opacity: 1; }
+  .card-arrow {
+    display: inline-flex; align-items: center; gap: .6rem; margin-top: 1.2rem;
+    font-family: 'Jost', sans-serif; font-size: .7rem; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--green);
+    opacity: 0; transform: translateX(-10px);
+    transition: opacity .4s .2s, transform .4s .2s;
+  }
+  .service-card:hover .card-arrow { opacity: 1; transform: translateX(0); }
+  .card-arrow::after { content: '→'; font-size: .9rem; }
+
+  /* ── PROCESS ── */
+  #process { background: var(--cream); }
+  .process-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    margin-top: 5rem; position: relative;
+  }
+  .process-grid::before {
+    content: ''; position: absolute; top: 2.8rem; left: 12.5%; right: 12.5%; height: 1px;
+    background: linear-gradient(to right, transparent, var(--green), transparent);
+    z-index: 0;
+  }
+  .process-step { padding: 0 2rem; text-align: center; position: relative; }
+  .step-circle {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--warm-white); border: 1px solid var(--green);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 2rem;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--green);
+    position: relative; z-index: 1;
+    transition: background .3s, color .3s;
+  }
+  .process-step:hover .step-circle { background: var(--green); color: #fff; }
+  .step-title {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 400;
+    color: var(--forest); margin-bottom: .8rem;
+  }
+  .step-desc {
+    font-family: 'Jost', sans-serif; font-size: .85rem; font-weight: 300;
+    line-height: 1.7; color: var(--mid);
+  }
+
+  /* ── GALLERY ── */
+  #gallery { background: var(--warm-white); padding: 8rem 4rem; }
+  .gallery-intro { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(2, 280px);
+    gap: 12px;
+  }
+  .gal-item {
+    overflow: hidden; position: relative;
+    background: var(--moss);
+  }
+  .gal-item:nth-child(1) { grid-column: 1 / 6; grid-row: 1 / 3; }
+  .gal-item:nth-child(2) { grid-column: 6 / 9; grid-row: 1 / 2; }
+  .gal-item:nth-child(3) { grid-column: 9 / 13; grid-row: 1 / 2; }
+  .gal-item:nth-child(4) { grid-column: 6 / 10; grid-row: 2 / 3; }
+  .gal-item:nth-child(5) { grid-column: 10 / 13; grid-row: 2 / 3; }
+  .gal-inner {
+    width: 100%; height: 100%; background-size: cover; background-position: center;
+    transition: transform .7s cubic-bezier(.25,.46,.45,.94);
+  }
+  .gal-item:hover .gal-inner { transform: scale(1.06); }
+  .gal-overlay {
+    position: absolute; inset: 0; background: rgba(26,40,24,0);
+    transition: background .4s; display: flex; align-items: center; justify-content: center;
+  }
+  .gal-item:hover .gal-overlay { background: rgba(26,40,24,.3); }
+  .gal-label {
+    font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-style: italic;
+    color: var(--cream); opacity: 0; transform: translateY(8px);
+    transition: opacity .4s, transform .4s;
+    letter-spacing: .1em;
+  }
+  .gal-item:hover .gal-label { opacity: 1; transform: translateY(0); }
+
+  /* ── TESTIMONIAL ── */
+  #testimonials {
+    background: var(--forest); padding: 8rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  #testimonials::before {
+    content: '"'; position: absolute; top: -2rem; left: 3rem;
+    font-family: 'Cormorant Garamond', serif; font-size: 20rem; font-weight: 300;
+    color: rgba(92,158,66,.06); line-height: 1; pointer-events: none;
+  }
+  .testimonials-track { display: flex; gap: 3rem; }
+  .testimonial-card {
+    flex: 0 0 calc(50% - 1.5rem);
+    background: rgba(255,255,255,.04); border: 1px solid rgba(92,158,66,.15);
+    padding: 3rem; position: relative;
+    transition: border-color .3s, background .3s;
+  }
+  .testimonial-card:hover { border-color: rgba(92,158,66,.4); background: rgba(255,255,255,.07); }
+  .stars { color: var(--green); font-size: .8rem; letter-spacing: .2em; margin-bottom: 1.5rem; }
+  .testimonial-text {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 300;
+    font-style: italic; line-height: 1.6; color: var(--cream); margin-bottom: 2rem;
+  }
+  .testimonial-author {
+    font-family: 'Jost', sans-serif; font-size: .75rem; font-weight: 400;
+    letter-spacing: .15em; text-transform: uppercase; color: var(--green);
+  }
+  .testimonial-location { color: rgba(245,240,232,.4); margin-top: .2rem; }
+
+  /* ── AREAS ── */
+  #areas { background: var(--cream); }
+  .areas-content { display: grid; grid-template-columns: 1fr 1fr; gap: 8rem; align-items: center; margin-top: 4rem; }
+  .areas-map-placeholder {
+    height: 480px; background: var(--forest); position: relative; overflow: hidden;
+  }
+  .areas-map-placeholder::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 40% 45%, rgba(74,103,65,.5) 0%, rgba(26,40,24,0) 65%);
+  }
+  .map-pulse {
+    position: absolute; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--green);
+    transform: translate(-50%, -50%);
+  }
+  .map-pulse::before {
+    content: ''; position: absolute; inset: -6px; border-radius: 50%;
+    border: 1px solid var(--green); animation: pulse 2s ease-out infinite;
+  }
+  .map-pulse::after {
+    content: ''; position: absolute; inset: -12px; border-radius: 50%;
+    border: 1px solid rgba(92,158,66,.3); animation: pulse 2s ease-out .5s infinite;
+  }
+  @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
+  /* dot positions (relative) */
+  .dot-1 { left: 42%; top: 38%; }
+  .dot-2 { left: 38%; top: 55%; }
+  .dot-3 { left: 48%; top: 60%; }
+  .dot-4 { left: 35%; top: 44%; }
+  .dot-5 { left: 52%; top: 45%; }
+  .dot-6 { left: 45%; top: 68%; }
+
+  .areas-list { list-style: none; display: flex; flex-direction: column; gap: 0; }
+  .areas-list li {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300;
+    color: var(--forest); border-bottom: 1px solid rgba(0,0,0,.07);
+    padding: 1.2rem 0; display: flex; justify-content: space-between; align-items: center;
+    cursor: default;
+    transition: color .3s, padding-left .3s;
+  }
+  .areas-list li:hover { color: var(--sage); padding-left: .8rem; }
+  .areas-list li::after { content: '↗'; font-size: 1rem; color: var(--green); opacity: 0; transition: opacity .3s; }
+  .areas-list li:hover::after { opacity: 1; }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--forest); padding: 8rem 4rem; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8rem; align-items: start; margin-top: 4rem; }
+  .contact-info { color: var(--cream); }
+  .contact-info p {
+    font-family: 'Jost', sans-serif; font-size: 1rem; font-weight: 300;
+    line-height: 1.9; color: rgba(245,240,232,.65); margin-bottom: 3rem;
+  }
+  .contact-detail {
+    display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 1.8rem;
+  }
+  .detail-icon {
+    width: 44px; height: 44px; border: 1px solid rgba(92,158,66,.3);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--green); font-size: 1rem; flex-shrink: 0;
+    transition: background .3s, border-color .3s;
+  }
+  .contact-detail:hover .detail-icon { background: var(--green); color: #fff; border-color: var(--green); }
+  .detail-text { font-family: 'Jost', sans-serif; }
+  .detail-label { font-size: .65rem; letter-spacing: .25em; text-transform: uppercase; color: var(--green); margin-bottom: .3rem; }
+  .detail-value { font-size: .95rem; font-weight: 300; color: var(--cream); }
+  .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .form-group { display: flex; flex-direction: column; gap: .5rem; }
+  .form-group label {
+    font-family: 'Jost', sans-serif; font-size: .65rem; letter-spacing: .2em;
+    text-transform: uppercase; color: rgba(245,240,232,.5);
+  }
+  .form-group input, .form-group select, .form-group textarea {
+    background: rgba(255,255,255,.05); border: 1px solid rgba(92,158,66,.2);
+    color: var(--cream); padding: .9rem 1.2rem;
+    font-family: 'Jost', sans-serif; font-size: .9rem; font-weight: 300;
+    outline: none; transition: border-color .3s, background .3s;
+    appearance: none;
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(245,240,232,.3); }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--green); background: rgba(255,255,255,.08);
+  }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+  .form-group select option { background: var(--forest); color: var(--cream); }
+  .btn-submit {
+    background: var(--green); color: #fff; border: none;
+    font-family: 'Jost', sans-serif; font-size: .75rem; font-weight: 500;
+    letter-spacing: .2em; text-transform: uppercase;
+    padding: 1.1rem 2.5rem; cursor: none;
+    transition: background .3s, transform .2s;
+    align-self: flex-start; position: relative; overflow: hidden;
+  }
+  .btn-submit::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--green-light); transform: translateX(-110%);
+    transition: transform .4s cubic-bezier(.25,.46,.45,.94);
+  }
+  .btn-submit:hover::before { transform: translateX(0); }
+  .btn-submit span { position: relative; z-index: 1; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0f1a0e; padding: 3rem 4rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--cream); letter-spacing: .15em; }
+  .footer.logo span { color: var(--green-light); }
+  .footer-copy { font-family: 'Jost', sans-serif; font-size: .75rem; font-weight: 300; color: rgba(245,240,232,.3); }
+  .footer-social { display: flex; gap: 1.2rem; }
+  .footer-social a {
+    width: 38px; height: 38px; border: 1px solid rgba(92,158,66,.2);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--green); font-size: .85rem; text-decoration: none;
+    transition: background .3s, border-color .3s;
+  }
+  .footer-social a:hover { background: var(--green); color: #fff; border-color: var(--green); }
+
+  /* ── REVEAL ANIMATIONS ── */
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity .8s cubic-bezier(.25,.46,.45,.94), transform .8s cubic-bezier(.25,.46,.45,.94);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
+  .reveal-delay-4 { transition-delay: .4s; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1.5rem 2rem; }
+    nav.scrolled { padding: 1rem 2rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 2rem; }
+    #about { grid-template-columns: 1fr; gap: 3rem; }
+    .about-visual { height: 400px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .service-card { aspect-ratio: 4/3; }
+    .process-grid { grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .process-grid::before { display: none; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .gal-item { grid-column: auto !important; grid-row: auto !important; height: 220px; }
+    .areas-content { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; gap: 4rem; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+    #hero { padding: 0 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">e<span>SK</span>ape</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Spaces</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#areas">Areas</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="tel:+447840970233" class="nav-cta">Call Us</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Manchester · Cheshire · Greater Manchester</p>
+    <h1 class="hero-title">Your garden,<br><em>reimagined</em></h1>
+    <p class="hero-sub">Bespoke outdoor living spaces that completely transform how you live, work and play — built for the way you want to live.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary"><span>Get Your Free Quote</span></a>
+      <a href="#services" class="btn-secondary">Explore Spaces</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span class="marquee-item">Garden Offices</span>
+    <span class="marquee-item">Home Gyms</span>
+    <span class="marquee-item">Bar & Leisure Rooms</span>
+    <span class="marquee-item">Custom Builds</span>
+    <span class="marquee-item">Greater Manchester</span>
+    <span class="marquee-item">Cheshire</span>
+    <span class="marquee-item">Bespoke Design</span>
+    <span class="marquee-item">Garden Offices</span>
+    <span class="marquee-item">Home Gyms</span>
+    <span class="marquee-item">Bar & Leisure Rooms</span>
+    <span class="marquee-item">Custom Builds</span>
+    <span class="marquee-item">Greater Manchester</span>
+    <span class="marquee-item">Cheshire</span>
+    <span class="marquee-item">Bespoke Design</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual reveal">
+    <div class="about-img-main"></div>
+    <div class="about-img-accent"></div>
+    <div class="about-badge">
+      <strong>100<span style="color:#fff;font-size:1.2rem">%</span></strong>
+      <span>Bespoke<br>Built</span>
+    </div>
+  </div>
+  <div class="about-text">
+    <div class="section-label reveal">Our Story</div>
+    <h2 class="section-title reveal reveal-delay-1">Spaces that change<br>the way you <em>live</em></h2>
+    <p class="reveal reveal-delay-2">At eSKape, we believe your garden holds untapped potential. We design and build premium garden rooms that become the most loved space in your home — purpose-built to suit whatever your life demands.</p>
+    <p class="reveal reveal-delay-3">From a peaceful home office far from the distractions of the main house, to a fully-equipped private gym, or the ultimate entertainment bar — every eSKape room is crafted with precision and built to last.</p>
+    <div class="about-stats reveal reveal-delay-4">
+      <div>
+        <div class="stat-num">50<span>+</span></div>
+        <div class="stat-label">Projects Completed</div>
+      </div>
+      <div>
+        <div class="stat-num">6<span>+</span></div>
+        <div class="stat-label">Areas Covered</div>
+      </div>
+      <div>
+        <div class="stat-num">5<span>★</span></div>
+        <div class="stat-label">Customer Rating</div>
+      </div>
+      <div>
+        <div class="stat-num">10<span>yr</span></div>
+        <div class="stat-label">Build Warranty</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-header">
+    <div class="section-label reveal">What We Build</div>
+    <h2 class="section-title reveal reveal-delay-1">A space for every<br><em>version of you</em></h2>
+    <p class="reveal reveal-delay-2">Each garden room is a blank canvas, designed around your life. Choose your purpose — we'll handle everything else.</p>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=900&q=80')"></div>
+      <div class="card-overlay"></div>
+      <div class="card-content">
+        <div class="card-num">01</div>
+        <div class="card-title">Garden Office</div>
+        <div class="card-desc">Your perfect work-from-home sanctuary. Fully insulated, wired with power and broadband-ready — a professional space steps from your door.</div>
+        <div class="card-arrow">Learn More</div>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=900&q=80')"></div>
+      <div class="card-overlay"></div>
+      <div class="card-content">
+        <div class="card-num">02</div>
+        <div class="card-title">Private Gym</div>
+        <div class="card-desc">No membership fees, no commute. A bespoke home gym fitted to your training style — rubber flooring, wall mirrors, and climate control included.</div>
+        <div class="card-arrow">Learn More</div>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1560840067-ddcaeb7831d2?w=900&q=80')"></div>
+      <div class="card-overlay"></div>
+      <div class="card-content">
+        <div class="card-num">03</div>
+        <div class="card-title">Bar & Leisure Room</div>
+        <div class="card-desc">The ultimate entertainment space. From home bars and cinema rooms to games lounges — entertain friends and family in a space entirely your own.</div>
+        <div class="card-arrow">Learn More</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="section-label reveal">How It Works</div>
+  <h2 class="section-title reveal reveal-delay-1">From vision to<br><em>reality, simply</em></h2>
+  <div class="process-grid">
+    <div class="process-step reveal reveal-delay-1">
+      <div class="step-circle">01</div>
+      <div class="step-title">Consultation</div>
+      <div class="step-desc">We visit your garden, listen to your vision and assess the space — completely free and with no obligation.</div>
+    </div>
+    <div class="process-step reveal reveal-delay-2">
+      <div class="step-circle">02</div>
+      <div class="step-title">Design</div>
+      <div class="step-desc">Our team crafts a bespoke design tailored to your space, lifestyle and budget — with full plans and a transparent quote.</div>
+    </div>
+    <div class="process-step reveal reveal-delay-3">
+      <div class="step-circle">03</div>
+      <div class="step-title">Build</div>
+      <div class="step-desc">Our skilled craftsmen bring your room to life with minimal disruption, adhering to the highest quality standards throughout.</div>
+    </div>
+    <div class="process-step reveal reveal-delay-4">
+      <div class="step-circle">04</div>
+      <div class="step-title">Enjoy</div>
+      <div class="step-desc">We hand over a fully finished, warrantied space ready for you to step into and make completely your own.</div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="gallery-intro">
+    <div>
+      <div class="section-label reveal">Our Work</div>
+      <h2 class="section-title reveal reveal-delay-1">Built to <em>inspire</em></h2>
+    </div>
+    <a href="#contact" class="btn-primary reveal reveal-delay-2"><span>Start Your Project</span></a>
+  </div>
+  <div class="gallery-grid reveal">
+    <div class="gal-item">
+      <div class="gal-inner" style="background-image:url('https://images.unsplash.com/photo-1600121848594-d8644e57abab?w=900&q=80')"></div>
+      <div class="gal-overlay"><div class="gal-label">Garden Office Suite</div></div>
+    </div>
+    <div class="gal-item">
+      <div class="gal-inner" style="background-image:url('https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=900&q=80')"></div>
+      <div class="gal-overlay"><div class="gal-label">Home Gym</div></div>
+    </div>
+    <div class="gal-item">
+      <div class="gal-inner" style="background-image:url('https://images.unsplash.com/photo-1571624436279-b272aff752b5?w=900&q=80')"></div>
+      <div class="gal-overlay"><div class="gal-label">Leisure Bar</div></div>
+    </div>
+    <div class="gal-item">
+      <div class="gal-inner" style="background-image:url('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=900&q=80')"></div>
+      <div class="gal-overlay"><div class="gal-label">Living Room Garden Pod</div></div>
+    </div>
+    <div class="gal-item">
+      <div class="gal-inner" style="background-image:url('https://images.unsplash.com/photo-1484154218962-a197022b5858?w=900&q=80')"></div>
+      <div class="gal-overlay"><div class="gal-label">Studio Build</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-label reveal">Client Stories</div>
+  <h2 class="section-title reveal reveal-delay-1" style="color:var(--cream)">What our clients <em>say</em></h2>
+  <div class="testimonials-track" style="margin-top:4rem">
+    <div class="testimonial-card reveal reveal-delay-1">
+      <div class="stars">★★★★★</div>
+      <div class="testimonial-text">"We can't believe we didn't do this sooner. Our garden office has completely changed our working life — it feels like a proper, professional space and it looks stunning from the house."</div>
+      <div class="testimonial-author">James & Sarah T.</div>
+      <div class="testimonial-location" style="font-family:'Jost',sans-serif;font-size:.75rem;font-weight:300;color:rgba(245,240,232,.4);margin-top:.3rem">Wilmslow, Cheshire</div>
+    </div>
+    <div class="testimonial-card reveal reveal-delay-2">
+      <div class="stars">★★★★★</div>
+      <div class="testimonial-text">"The bar room eSKape built for us is honestly the envy of all our friends. The quality of the build is outstanding and the team were a pleasure to work with from start to finish."</div>
+      <div class="testimonial-author">Mark D.</div>
+      <div class="testimonial-location" style="font-family:'Jost',sans-serif;font-size:.75rem;font-weight:300;color:rgba(245,240,232,.4);margin-top:.3rem">Alderley Edge, Cheshire</div>
+    </div>
+  </div>
+</section>
+
+<!-- AREAS -->
+<section id="areas" style="background:var(--cream)">
+  <div class="section-label reveal">Coverage</div>
+  <h2 class="section-title reveal reveal-delay-1">Areas we <em>serve</em></h2>
+  <div class="areas-content">
+    <div class="areas-map-placeholder reveal">
+      <div class="map-pulse dot-1"></div>
+      <div class="map-pulse dot-2"></div>
+      <div class="map-pulse dot-3"></div>
+      <div class="map-pulse dot-4"></div>
+      <div class="map-pulse dot-5"></div>
+      <div class="map-pulse dot-6"></div>
+      <div style="position:absolute;bottom:2rem;left:2rem;font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;color:rgba(245,240,232,.4)">Greater Manchester &amp; Cheshire</div>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <p style="font-family:'Jost',sans-serif;font-size:.95rem;font-weight:300;line-height:1.9;color:var(--mid);margin-bottom:2rem">We serve homeowners across Greater Manchester and Cheshire. Don't see your area? Get in touch — we may still be able to help.</p>
+      <ul class="areas-list">
+        <li>Manchester</li>
+        <li>Stockport</li>
+        <li>Marple</li>
+        <li>Poynton</li>
+        <li>Romiley</li>
+        <li>Alderley Edge</li>
+        <li>Wilmslow</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label reveal" style="color:var(--green)">Get In Touch</div>
+  <h2 class="section-title reveal reveal-delay-1" style="color:var(--cream)">Start your<br><em>eSKape today</em></h2>
+  <div class="contact-grid">
+    <div class="contact-info reveal reveal-delay-1">
+      <p>Ready to transform your garden? Get in touch for a free, no-obligation consultation. We'll come to you, listen to your vision and give you an honest, transparent quote.</p>
+      <div class="contact-detail">
+        <div class="detail-icon">📞</div>
+        <div class="detail-text">
+          <div class="detail-label">Phone</div>
+          <div class="detail-value"><a href="tel:+447840970233" style="color:inherit;text-decoration:none">+44 7840 970233</a></div>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="detail-icon">✉</div>
+        <div class="detail-text">
+          <div class="detail-label">Email</div>
+          <div class="detail-value"><a href="mailto:eskapegardenrooms@gmail.com" style="color:inherit;text-decoration:none">eskapegardenrooms@gmail.com</a></div>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="detail-icon">📍</div>
+        <div class="detail-text">
+          <div class="detail-label">Coverage</div>
+          <div class="detail-value">Manchester & Cheshire, UK</div>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form reveal reveal-delay-2" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="Your first name">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Your last name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" placeholder="+44...">
+      </div>
+      <div class="form-group">
+        <label>Type of Space</label>
+        <select>
+          <option value="">Select a space type...</option>
+          <option>Garden Office</option>
+          <option>Home Gym</option>
+          <option>Bar / Leisure Room</option>
+          <option>Custom / Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tell Us About Your Project</label>
+        <textarea placeholder="Describe your vision, garden size, any specific requirements..."></textarea>
+      </div>
+      <button type="submit" class="btn-submit"><span>Send Enquiry →</span></button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">e<span>SK</span>ape Garden Rooms</div>
+  <div class="footer-copy">© 2025 eSKape Garden Rooms. All rights reserved. Manchester, UK.</div>
+  <div class="footer-social">
+    <a href="https://www.facebook.com/profile.php?id=61586528851567" target="_blank" aria-label="Facebook">f</a>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px'; cursor.style.top = mouseY + 'px';
+  });
+  function animateRing() {
+    ringX += (mouseX - ringX) * .12; ringY += (mouseY - ringY) * .12;
+    ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => obs.observe(el));
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.btn-submit span');
+    btn.textContent = 'Enquiry Sent ✓';
+    btn.parentElement.style.background = '#4a6741';
+    setTimeout(() => { btn.textContent = 'Send Enquiry →'; btn.parentElement.style.background = ''; }, 3000);
+  }
+</script>
+</body>
+</html>
